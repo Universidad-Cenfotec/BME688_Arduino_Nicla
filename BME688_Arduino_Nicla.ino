@@ -19,6 +19,7 @@ float meanTemp = 0;
 float meanHumidity = 0;
 float meanGas = 0;
 
+//númwero de muestra a tomar y máximos y mínimos para determinar porcentaje de seguridad
 const int samples = 200;
 const int maxGas = 23000;
 const int minGas = 5000;
@@ -43,9 +44,8 @@ void setup()
 
 void loop()
 {
-  static auto printTime = millis();
 
-  // Update function should be continuously polled
+  // Para generar lecturas con los sensores
   BHY2.update();
 
   //calcula un priomedio de varias mediciones
@@ -63,10 +63,10 @@ void loop()
   meanHumidity = meanHumidity / samples;
   meanGas = meanGas / samples;
 
-  // calcula porcerntaje a partir de valor de resistencia de Gases
+  // calcula porcerntaje de "seguridad" a partir de valor de resistencia de Gases
     int pGas = round((1.0/(maxGas - minGas)*meanGas - (minGas*(1.0/(maxGas -minGas))))*100);
  
-  //indicador Led, rojo indica que se sobrepasa capacidad
+  //indicador Led, rojo indica que porcentaje menor que cierto valor límite
   if(pGas>65){
     nicla::leds.setColor(green); 
   }else{
